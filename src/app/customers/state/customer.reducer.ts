@@ -1,26 +1,52 @@
-const initialState = {
-    customers: [
-        {
-            name: 'John Doe',
-            phone: '91929394958',
-            address: '123 Sun street',
-            membership: 'Platinum',
-            id: 1
-        }
-    ],
-    loading: false,
-    loaded: true
+import * as customerActions from './customer.actions';
+
+import { Customer } from '../customer.model';
+
+import * as fromRoot from '../../state/app-state';
+
+export interface CustomerState {
+    customers: Customer[];
+    loading: boolean;
+    loaded: boolean;
+    error: string;
 }
 
-export function customerReducer (state = initialState, action) {
+export interface AppState extends fromRoot.AppState {
+    customers: CustomerState
+}
+
+export const initialState: CustomerState = {
+    customers: [],
+    loading: false,
+    loaded: false,
+    error: ''
+}
+
+export function customerReducer (state = initialState, action: customerActions.Action) : CustomerState {
     switch(action.type) {
-        case 'LOAD_CUSTOMERS': {
+        case customerActions.CustomerActionTypes.LOAD_CUSTOMER: {
             return {
                 ...state,
-                loading: true,
-                loaded: false
+                loading: true
             };
         }
+        case customerActions.CustomerActionTypes.LOAD_CUSTOMER_SUCCESS: {
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                customers: action.payload
+            };
+        }
+        case customerActions.CustomerActionTypes.LOAD_CUSTOMER_FAIL: {
+            return {
+                ...state,
+                loading: false,
+                loaded: false,
+                error: action.payload
+            };
+        }
+        
         default: {
             return state;
         }
