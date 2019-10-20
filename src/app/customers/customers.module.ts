@@ -4,7 +4,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { StoreModule } from '@ngrx/store';
 
+import { EffectsModule, Actions } from '@ngrx/effects';
+
 import { customerReducer } from './state/customer.reducer';
+import { CustomerEffect } from './state/customer.effects';
 
 import { CustomerComponent } from './customer/customer.component';
 import { CustomerAddComponent } from './customer-add/customer-add.component';
@@ -19,9 +22,10 @@ const customerRoutes: Routes = [
 @NgModule({
   declarations: [CustomerComponent, CustomerAddComponent, CustomerEditComponent, CustomerListComponent],
   imports: [
-  CommonModule,
+    CommonModule,
     RouterModule.forChild(customerRoutes),
-    StoreModule.forFeature('customers', customerReducer)
+    StoreModule.forFeature('customers', customerReducer),
+    EffectsModule.forFeature([CustomerEffect])
   ]
 })
 export class CustomersModule { }
